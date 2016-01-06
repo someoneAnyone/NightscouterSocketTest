@@ -57,7 +57,7 @@ public class NightscoutSocketIOClient {
         // Listen to connect.
         socket.on(WebEvents.connect.rawValue) { data, ack in
             print("socket connected")
-            self.socket.emit(WebEvents.authorize.rawValue, self.authorizationJSON ?? "{}")
+            self.socket.emit(WebEvents.authorize.rawValue, self.authorizationJSON ?? "{ }")
         }
         
         // Listen to disconnect.
@@ -92,7 +92,6 @@ extension NightscoutSocketIOClient {
         if let lastUpdated = json[JSONProperty.lastUpdated].int {
             // print(lastUpdated)
             site.lastUpdated = NSDate(timeIntervalSince1970: (Double(lastUpdated) / 1000))
-            
         }
         
         if let uploaderBattery = json[JSONProperty.devicestatus][JSONProperty.uploaderBattery].int {
@@ -223,7 +222,7 @@ public struct DeviceStatus: CustomStringConvertible {
     }
     
     public var description: String {
-        return "DeviceStatus - Battery: \(uploaderBattery)"
+        return "{ DeviceStatus: { uploaderBattery: \(uploaderBattery),  batteryLevel: \(batteryLevel) } }"
     }
 }
 
@@ -233,7 +232,7 @@ public struct MeteredGlucoseValue: CustomStringConvertible, Dateable, GlucoseVal
     public let mgdl: Int
     
     public var description: String {
-        return "MeteredGlucoseValue - Device: \(device), mg/dL: \(mgdl) Date: \(date)"
+        return "{ MeteredGlucoseValue: { milliseconds: \(milliseconds),  device: \(device), mgdl: \(mgdl) } }"
     }
 }
 
@@ -248,7 +247,7 @@ public struct SensorGlucoseValue: CustomStringConvertible, Dateable, GlucoseValu
     public let mgdl: Int
     
     public var description: String {
-        return "SensorGlucoseValue - Device: \(device), mg/dL: \(mgdl), Date: \(date), Direction: \(direction)"
+        return "{ SensorGlucoseValue: { device: \(device), mgdl: \(mgdl), date: \(date), direction: \(direction) } }"
     }
 }
 
@@ -259,7 +258,7 @@ public struct Calibration: CustomStringConvertible, Dateable {
     public let milliseconds: Int
     
     public var description: String {
-        return "Calibration - Slope: \(slope), intercept: \(intercept), scale: \(scale), Date: \(date)"
+        return "{ Calibration: { slope: \(slope), intercept: \(intercept), scale: \(scale), date: \(date) } }"
     }
 }
 
