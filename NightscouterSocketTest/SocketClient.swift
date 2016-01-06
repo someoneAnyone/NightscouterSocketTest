@@ -52,7 +52,7 @@ public class NightscoutSocketIOClient {
         self.authorizationDictionary = [SocketHeader.Client: SocketValue.ClientMobile, SocketHeader.Secret: apiSecret ?? ""]
         
         // Create a socket.io client with a url string.
-        self.socket = SocketIOClient(socketURL: url.absoluteString, options: [.Log(false), .ForcePolling(false)])
+        self.socket = SocketIOClient(socketURL: url.absoluteString, options: [.Log(true), .ForcePolling(false)])
         
         // Listen to connect.
         socket.on(WebEvents.connect.rawValue) { data, ack in
@@ -122,7 +122,7 @@ extension NightscoutSocketIOClient {
         
         let cals = json[JSONProperty.cals]
         for (_, subJson) in cals {
-            if let slope = subJson[JSONProperty.slope].double, intercept = subJson[JSONProperty.intercept].double, scale = subJson[JSONProperty.scale].int, mills = subJson[JSONProperty.mills].int {
+            if let slope = subJson[JSONProperty.slope].double, intercept = subJson[JSONProperty.intercept].double, scale = subJson[JSONProperty.scale].double, mills = subJson[JSONProperty.mills].int {
                 
                 let calibration = Calibration(slope: slope, intercept: intercept, scale: scale, milliseconds: mills)
                 
@@ -205,6 +205,33 @@ public protocol DeviceOwnable {
     var device: String { get }
 }
 
+func rawIsigToRawBg(sgValue: SensorGlucoseValue, calValue: Calibration) -> Double {
+    
+    var raw: Double = 0
+    
+    let unfiltered = Double(sgValue.unfiltered)
+    let filtered = Double(sgValue.filtered)
+    let sgv: Double = Double(sgValue.mgdl)//sgValue.sgv.isInteger ? sgValue.sgv : sgValue.sgv.toMgdl
+    let slope = calValue.slope
+    let scale = calValue.scale
+    let intercept = calValue.intercept
+    
+    if (slope == 0 || unfiltered == 0 || scale == 0) {
+        raw = 0;
+    } else if (filtered == 0 || sgv < 40) {
+        raw = scale * (unfiltered - intercept) / slope
+    } else {
+        let ratioCalc = scale * (filtered - intercept) / slope
+        let ratio = ratioCalc / sgv
+        
+        let rawCalc = scale * (unfiltered - intercept) / slope
+        raw = rawCalc / ratio
+    }
+    
+    return round(raw)
+}
+
+
 public struct DeviceStatus: CustomStringConvertible {
     let uploaderBattery: Int
     var batteryLevel: String {
@@ -254,7 +281,7 @@ public struct SensorGlucoseValue: CustomStringConvertible, Dateable, GlucoseValu
 public struct Calibration: CustomStringConvertible, Dateable {
     public let slope: Double
     public let intercept: Double
-    public let scale: Int
+    public let scale: Double
     public let milliseconds: Int
     
     public var description: String {

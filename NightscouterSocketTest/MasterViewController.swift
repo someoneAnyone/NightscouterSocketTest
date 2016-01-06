@@ -22,10 +22,11 @@ class MasterViewController: UITableViewController {
         }
         
         NightscoutSocketIOClient()
-       
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("populateDataSource:"), name: ClientNotifications.comNightscouterDataUpdate.rawValue, object: nil)
         
         var timer = NSTimer.scheduledTimerWithTimeInterval(30, target: self, selector: "update", userInfo: nil, repeats: true)
+        timer.fire()
     }
     
     func update() {
@@ -79,7 +80,7 @@ class MasterViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
         
-        if indexPath.row <= 1 {
+        if indexPath.row <= 3 {
             cell.accessoryType = .None
         }
         
@@ -111,14 +112,36 @@ class MasterViewController: UITableViewController {
             let mbgs = site.mbgs.map({
                 SectionData(name: $0.date.timeAgoSinceNow(), detail: "device: \($0.device) mgdl: \($0.mgdl)", data: nil)
             })
-                        
+            
+            let sgv0 = site.sgvs[0]
+            let sgv1 = site.sgvs[1]
+            
+            let delta = sgv0.mgdl - sgv1.mgdl
+            
+            let raw = rawIsigToRawBg(sgv0, calValue: site.cals[0])
+            let detail = "\(sgv0.mgdl) \(sgv0.direction) -- \(raw) : \(sgv0.noise)"
+            
+            
+            let numberFormat =  NSNumberFormatter()
+            numberFormat.numberStyle = .DecimalStyle
+            numberFormat.positivePrefix = numberFormat.plusSign
+            numberFormat.negativePrefix = numberFormat.minusSign
+            numberFormat.zeroSymbol = "---"
+            
+            guard let deltaString = numberFormat.stringFromNumber(delta) else {
+                return
+            }
+            
             let section0 = SectionData(name: "Battery", detail: String(status.batteryLevel), data: nil)
             let section1 = SectionData(name: "Last Update", detail: last.timeAgoSinceNow(), data: nil)
+            let watchData0 = SectionData(name: "Watchface Data", detail: "", data: nil)
+            let watchData = SectionData(name: "\(deltaString) UNITS", detail: detail, data: nil)
+
             let section2 = SectionData(name: "Sensor Glucose Values", detail: "count \(sgvs.count)", data: sgvs)
             let section3 = SectionData(name: "Calibration Values", detail: "count \(cals.count)", data: cals)
             let section4 = SectionData(name: "Meter Glucose Values", detail: "count \(mbgs.count)", data: mbgs)
             
-            objects.appendContentsOf([section0, section1, section2, section3, section4])
+            objects.appendContentsOf([section0, section1, watchData0, watchData, section2, section3, section4])
             
             tableView.reloadData()
             
