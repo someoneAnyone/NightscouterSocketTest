@@ -3,11 +3,10 @@
 # Uncomment this line if you're using Swift
 use_frameworks!
 
-target 'NightscouterSocketTest' do
     pod 'Socket.IO-Client-Swift', '~> 4.1.6' # Or latest version
     pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'
     pod 'DateTools'
-end
+    pod 'ReactiveCocoa', '4.0.4-alpha-4'
 
 plugin 'cocoapods-keys', {
     :project => "NightscouterSocketTest",

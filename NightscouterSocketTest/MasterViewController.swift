@@ -7,12 +7,15 @@
 //
 
 import UIKit
+import Keys
 
 class MasterViewController: UITableViewController {
     
     var detailViewController: DetailTableViewController? = nil
     var objects = [SectionData]()
     
+    var timer: NSTimer?
+    var socketClient: NightscoutSocketIOClient?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,15 +24,30 @@ class MasterViewController: UITableViewController {
             self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailTableViewController
         }
         
-        NightscoutSocketIOClient()
+        self.title = "Socket.io Test VC"
         
+        
+        let keys = NightscoutersockettestKeys()
+        
+        socketClient = NightscoutSocketIOClient(url: NSURL(string: keys.nightscoutDevSite())!, apiSecret: keys.nightscoutSecretSHA1Key())
+
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("populateDataSource:"), name: ClientNotifications.comNightscouterDataUpdate.rawValue, object: nil)
         
-        var timer = NSTimer.scheduledTimerWithTimeInterval(30, target: self, selector: "update", userInfo: nil, repeats: true)
-        timer.fire()
+        timer = NSTimer.scheduledTimerWithTimeInterval(30, target: self, selector: "update", userInfo: nil, repeats: true)
+        timer?.fire()
+
+        /*
+        // From ericmarkmartin... RAC integration
+        socketClient?.sginal.observeNext{ data in
+            
+            // RAW data is returned from the socket... it ins't processed into JSON or a model yet.
+            print("mark \(data)")
+        }
+        */
     }
     
     func update() {
+        print("updateTable")
         tableView.reloadData()
     }
     
@@ -45,12 +63,7 @@ class MasterViewController: UITableViewController {
     
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
-    }
-    
-    func insertNewObject(sender: AnyObject) {
-        //        objects.insert(NSDate(), atIndex: 0)
-        //        let indexPath = NSIndexPath(forRow: 0, inSection: 0)
-        //        self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        timer?.invalidate()
     }
     
     // MARK: - Segues
@@ -97,54 +110,60 @@ class MasterViewController: UITableViewController {
     
     func populateDataSource(notification: NSNotification) {
         if let client = notification.object as? NightscoutSocketIOClient, site = client.site {
-            print(client.site)
+            // print(client.site)
             
-            let last = site.lastUpdated
-            let status = site.deviceStatus
+            objects.removeAll()
+            
+            let last = site.date
+            let status = site.deviceStatus.first
             
             let sgvs = site.sgvs.map({
-                SectionData(name: $0.date.timeAgoSinceNow(), detail: "device: \($0.device) mgdl: \($0.mgdl)", data: nil)
+                SectionData(name: "\($0.date.timeAgoSinceNow()) : \($0.date)" , detail: "device: \($0.device) mgdl: \($0.mgdl)\nfiltered: \($0.filtered) unfiltered: \($0.unfiltered) direction: \($0.direction)", data: nil)
             })
             let cals = site.cals.map({
-                SectionData(name: $0.date.timeAgoSinceNow(), detail: "intercept: \($0.intercept) scale: \($0.scale) slope: \($0.slope)", data: nil)
+                SectionData(name: "\($0.date.timeAgoSinceNow()) : \($0.date)", detail: "intercept: \($0.intercept) scale: \($0.scale) slope: \($0.slope)", data: nil)
             })
             
             let mbgs = site.mbgs.map({
-                SectionData(name: $0.date.timeAgoSinceNow(), detail: "device: \($0.device) mgdl: \($0.mgdl)", data: nil)
+                SectionData(name: "\($0.date.timeAgoSinceNow()) : \($0.date)", detail: "device: \($0.device) mgdl: \($0.mgdl)", data: nil)
             })
             
-            let sgv0 = site.sgvs[0]
-            let sgv1 = site.sgvs[1]
-            
-            let delta = sgv0.mgdl - sgv1.mgdl
-            
-            let raw = rawIsigToRawBg(sgv0, calValue: site.cals[0])
-            let detail = "\(sgv0.mgdl) \(sgv0.direction) -- \(raw) : \(sgv0.noise)"
-            
-            
-            let numberFormat =  NSNumberFormatter()
-            numberFormat.numberStyle = .DecimalStyle
-            numberFormat.positivePrefix = numberFormat.plusSign
-            numberFormat.negativePrefix = numberFormat.minusSign
-            numberFormat.zeroSymbol = "---"
-            
-            guard let deltaString = numberFormat.stringFromNumber(delta) else {
-                return
+            var delta: Int = 0
+            var raw: Double = 0
+            var detail: String = ""
+            var lastReading: String = ""
+            if let latestSgv = site.sgvs.first {
+                
+                lastReading = latestSgv.date.timeAgoSinceNow()
+                
+                if let previousSgv = site.sgvs[safe:1] where latestSgv.isSGVOk {
+                    delta = latestSgv.mgdl - previousSgv.mgdl
+                }
+                if let cal = site.cals.first {
+                    raw = rawIsigToRawBg(latestSgv, calValue: cal)
+                }
+                detail = "\(latestSgv.mgdl) \(latestSgv.direction) -- \(raw) : \(latestSgv.noise)"
             }
             
-            let section0 = SectionData(name: "Battery", detail: String(status.batteryLevel), data: nil)
-            let section1 = SectionData(name: "Last Update", detail: last.timeAgoSinceNow(), data: nil)
-            let watchData0 = SectionData(name: "Watchface Data", detail: "", data: nil)
-            let watchData = SectionData(name: "\(deltaString) UNITS", detail: detail, data: nil)
-
+            let deltaNumberFormat =  NSNumberFormatter()
+            deltaNumberFormat.numberStyle = .DecimalStyle
+            deltaNumberFormat.positivePrefix = deltaNumberFormat.plusSign
+            deltaNumberFormat.negativePrefix = deltaNumberFormat.minusSign
+            // deltaNumberFormat.zeroSymbol = "---"
+            
+            let section0 = SectionData(name: "Battery", detail: String(status!.batteryLevel), data: nil)
+            let section1 = SectionData(name: "Last Socket Update", detail: last.timeAgoSinceNow(), data: nil)
+            let watchData0 = SectionData(name: "Watchface Data next row...", detail: lastReading, data: nil)
+            let watchData = SectionData(name: "\(deltaNumberFormat.stringFromNumber(delta) ?? "---") UNITS", detail: detail, data: nil)
+            
             let section2 = SectionData(name: "Sensor Glucose Values", detail: "count \(sgvs.count)", data: sgvs)
             let section3 = SectionData(name: "Calibration Values", detail: "count \(cals.count)", data: cals)
             let section4 = SectionData(name: "Meter Glucose Values", detail: "count \(mbgs.count)", data: mbgs)
             
             objects.appendContentsOf([section0, section1, watchData0, watchData, section2, section3, section4])
             
+            self.navigationController?.popToRootViewControllerAnimated(true)
             tableView.reloadData()
-            
         }
     }
 }
@@ -154,4 +173,3 @@ struct SectionData {
     let detail: String?
     let data: [SectionData]?
 }
-

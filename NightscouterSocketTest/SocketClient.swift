@@ -9,9 +9,12 @@
 import Foundation
 import Socket_IO_Client_Swift
 import SwiftyJSON
-import Keys
+import ReactiveCocoa
 
 public class NightscoutSocketIOClient {
+    
+    // From ericmarkmartin... RAC integration
+    public let sginal: Signal<[AnyObject], NSError>
     
     public var url: NSURL!
     public var site: Site? {
@@ -24,23 +27,17 @@ public class NightscoutSocketIOClient {
         }
     }
     private var apiSecret: String?
-    private let authorizationDictionary: [String : AnyObject]
     private let socket: SocketIOClient
-    private var authorizationJSON: String? {
+    private var authorizationJSON: AnyObject {
         // Turn the the authorization dictionary into a JSON object.
-        guard let jsonData = try? NSJSONSerialization.dataWithJSONObject(self.authorizationDictionary, options: NSJSONWritingOptions()) else {
-            return nil
-        }
         
-        return String(data: jsonData, encoding: NSUTF8StringEncoding)
+        var json = JSON([SocketHeader.Client : JSON(SocketValue.ClientMobile), SocketHeader.Secret: JSON(apiSecret ?? "")])
+        
+        return json.object
     }
     
-    public convenience init () {
-        // This project uses cocoapods-keys to store secrets.
-        // Get all the keys.
-        let keys = NightscoutersockettestKeys()
-        
-        self.init(url: NSURL(string: keys.nightscoutTestSite())!, apiSecret: keys.nightscoutSecretSHA1Key())
+    private convenience init () {
+        self.init(url: NSURL(string: "https://nscgm.herokuapp.com")!)
     }
     
     public init(url: NSURL, apiSecret: String? = nil) {
@@ -48,16 +45,17 @@ public class NightscoutSocketIOClient {
         self.url = url
         self.apiSecret = apiSecret
         
-        // Create a dictionary for authorization.
-        self.authorizationDictionary = [SocketHeader.Client: SocketValue.ClientMobile, SocketHeader.Secret: apiSecret ?? ""]
-        
         // Create a socket.io client with a url string.
-        self.socket = SocketIOClient(socketURL: url.absoluteString, options: [.Log(true), .ForcePolling(false)])
+        self.socket = SocketIOClient(socketURL: url.absoluteString, options: [.Log(false), .ForcePolling(false)])
+        
+        
+        // From ericmarkmartin... RAC integration
+        self.sginal = socket.rac_socketSignal()
         
         // Listen to connect.
         socket.on(WebEvents.connect.rawValue) { data, ack in
             print("socket connected")
-            self.socket.emit(WebEvents.authorize.rawValue, self.authorizationJSON ?? "{ }")
+            self.socket.emit(WebEvents.authorize.rawValue, self.authorizationJSON)
         }
         
         // Listen to disconnect.
@@ -87,56 +85,91 @@ public class NightscoutSocketIOClient {
 extension NightscoutSocketIOClient {
     func processJSON(json: JSON) {
         
-        var site = Site()
         
-        if let lastUpdated = json[JSONProperty.lastUpdated].int {
-            // print(lastUpdated)
-            site.lastUpdated = NSDate(timeIntervalSince1970: (Double(lastUpdated) / 1000))
+        if self.site == nil {
+            self.site = Site()
         }
         
-        if let uploaderBattery = json[JSONProperty.devicestatus][JSONProperty.uploaderBattery].int {
-            // print(uploaderBattery)
-            site.deviceStatus = DeviceStatus(uploaderBattery: uploaderBattery)
-        }
-        
-        let sgvs = json[JSONProperty.sgvs]
-        for (_, subJson) in sgvs {
-            if let device = subJson[JSONProperty.device].string, rssi = subJson[JSONProperty.rssi].int, unfiltered = subJson[JSONProperty.unfiltered].int, direction = subJson[JSONProperty.direction].string, filtered = subJson[JSONProperty.filtered].int, noise = subJson[JSONProperty.noise].int, mills = subJson[JSONProperty.mills].int, mgdl = subJson[JSONProperty.mgdl].int {
-                
-                let sensorValue = SensorGlucoseValue(device: device, rssi: rssi, unfiltered: unfiltered, direction: direction, filtered: filtered, noise: noise, milliseconds: mills, mgdl: mgdl)
-                
-                site.sgvs.append(sensorValue)
-                // print(sensorValue)
+        if var site = self.site {
+            if let lastUpdated = json[JSONProperty.lastUpdated].int {
+                // print(lastUpdated)
+                site.milliseconds = lastUpdated
+                //site.lastUpdated = NSDate(timeIntervalSince1970: (Double(lastUpdated) / 1000))
             }
-        }
-        
-        let mbgs = json[JSONProperty.mbgs]
-        for (_, subJson) in mbgs {
-            if let device = subJson[JSONProperty.device].string, mills = subJson[JSONProperty.mills].int, mgdl = subJson[JSONProperty.mgdl].int {
-                
-                let meter = MeteredGlucoseValue(milliseconds: mills, device: device, mgdl: mgdl)
-                site.mbgs.append(meter)
-                // print(meter)
+            
+            if let uploaderBattery = json[JSONProperty.devicestatus][JSONProperty.uploaderBattery].int {
+                site.deviceStatus.append(DeviceStatus(uploaderBattery: uploaderBattery, milliseconds: 0))
             }
-        }
-        
-        let cals = json[JSONProperty.cals]
-        for (_, subJson) in cals {
-            if let slope = subJson[JSONProperty.slope].double, intercept = subJson[JSONProperty.intercept].double, scale = subJson[JSONProperty.scale].double, mills = subJson[JSONProperty.mills].int {
+            
+            let deviceStatus = json[JSONProperty.devicestatus]
+            
+            for (_, subJson) in deviceStatus {
                 
-                let calibration = Calibration(slope: slope, intercept: intercept, scale: scale, milliseconds: mills)
+                print(subJson.description)
+                if let mills = subJson[JSONProperty.mills].int {
+                    if let uploaderBattery = subJson[JSONProperty.uploader, JSONProperty.battery].int {
+                        site.deviceStatus.append(DeviceStatus(uploaderBattery: uploaderBattery, milliseconds: mills))
+                    }
+                }
                 
-                site.cals.append(calibration)
-                // print(calibration)
+                
             }
+            
+            
+            let sgvs = json[JSONProperty.sgvs]
+            for (_, subJson) in sgvs {
+                if let device = subJson[JSONProperty.device].string, rssi = subJson[JSONProperty.rssi].int, unfiltered = subJson[JSONProperty.unfiltered].int, direction = subJson[JSONProperty.direction].string, filtered = subJson[JSONProperty.filtered].int, noise = subJson[JSONProperty.noise].int, mills = subJson[JSONProperty.mills].int, mgdl = subJson[JSONProperty.mgdl].int {
+                    
+                    guard let typedNoise = Noise(rawValue: noise) else {
+                        let sensorValue = SensorGlucoseValue(device: device, rssi: rssi, unfiltered: unfiltered, direction: direction, filtered: filtered, noise: .Unknown, milliseconds: mills, mgdl: mgdl)
+                        site.sgvs.append(sensorValue)
+                        return
+                    }
+                    
+                    let sensorValue = SensorGlucoseValue(device: device, rssi: rssi, unfiltered: unfiltered, direction: direction, filtered: filtered, noise: typedNoise , milliseconds: mills, mgdl: mgdl)
+                    
+                    site.sgvs.append(sensorValue)
+                    // print(sensorValue)
+                }
+            }
+            
+            let mbgs = json[JSONProperty.mbgs]
+            for (_, subJson) in mbgs {
+                if let device = subJson[JSONProperty.device].string, mills = subJson[JSONProperty.mills].int, mgdl = subJson[JSONProperty.mgdl].int {
+                    
+                    let meter = MeteredGlucoseValue(milliseconds: mills, device: device, mgdl: mgdl)
+                    site.mbgs.append(meter)
+                    // print(meter)
+                }
+            }
+            
+            let cals = json[JSONProperty.cals]
+            for (_, subJson) in cals {
+                if let slope = subJson[JSONProperty.slope].double, intercept = subJson[JSONProperty.intercept].double, scale = subJson[JSONProperty.scale].double, mills = subJson[JSONProperty.mills].int {
+                    
+                    let calibration = Calibration(slope: slope, intercept: intercept, scale: scale, milliseconds: mills)
+                    
+                    site.cals.append(calibration)
+                    // print(calibration)
+                }
+            }
+            // print(site)
+            
+            // makes sure things are sorted correctly by date. When delta's come in they might screw up the order.
+            site.sgvs = site.sgvs.sort{(item1:SensorGlucoseValue, item2:SensorGlucoseValue) -> Bool in
+                item1.date.compare(item2.date) == NSComparisonResult.OrderedDescending
+            }
+            site.cals = site.cals.sort{(item1:Calibration, item2:Calibration) -> Bool in
+                item1.date.compare(item2.date) == NSComparisonResult.OrderedDescending
+            }
+            site.mbgs = site.mbgs.sort{(item1:MeteredGlucoseValue, item2:MeteredGlucoseValue) -> Bool in
+                item1.date.compare(item2.date) == NSComparisonResult.OrderedDescending
+            }
+            
+            
+            self.site = site
+            
         }
-        // print(site)
-        
-        site.sgvs = site.sgvs.reverse()
-        site.cals = site.cals.reverse()
-        site.mbgs = site.mbgs.reverse()
-        
-        self.site = site
     }
 }
 
@@ -144,6 +177,8 @@ extension NightscoutSocketIOClient {
 struct JSONProperty {
     static let lastUpdated = "lastUpdated"
     static let devicestatus = "devicestatus"
+    static let uploader = "uploader"
+    static let battery = "battery"
     static let sgvs = "sgvs"
     static let mbgs = "mbgs"
     static let cals = "cals"
@@ -161,6 +196,7 @@ struct JSONProperty {
     static let noise = "noise"
     static let profiles = "profiles"
     static let treatments = "treatments"
+    static let deltaCount = "delta"
 }
 
 public enum ClientNotifications: String {
@@ -199,6 +235,13 @@ public extension Dateable {
 
 public protocol GlucoseValueHolder {
     var mgdl: Int { get }
+    var isSGVOk: Bool { get }
+}
+
+public extension GlucoseValueHolder {
+    public var isSGVOk: Bool {
+        return mgdl >= 13
+    }
 }
 
 public protocol DeviceOwnable {
@@ -232,9 +275,10 @@ func rawIsigToRawBg(sgValue: SensorGlucoseValue, calValue: Calibration) -> Doubl
 }
 
 
-public struct DeviceStatus: CustomStringConvertible {
-    let uploaderBattery: Int
-    var batteryLevel: String {
+public struct DeviceStatus: CustomStringConvertible, Dateable {
+    public let uploaderBattery: Int
+    public var milliseconds: Int
+    public var batteryLevel: String {
         get {
             let numFormatter = NSNumberFormatter()
             
@@ -269,7 +313,7 @@ public struct SensorGlucoseValue: CustomStringConvertible, Dateable, GlucoseValu
     public let unfiltered: Int
     public let direction: String
     public let filtered: Int
-    public let noise: Int
+    public let noise: Noise
     public let milliseconds: Int
     public let mgdl: Int
     
@@ -289,10 +333,26 @@ public struct Calibration: CustomStringConvertible, Dateable {
     }
 }
 
-public struct Site {
+public enum Noise: Int {
+    case None = 0, Clean, Light, Medium, Heavy, Unknown
+    
+    public init () {
+        self = .None
+    }
+}
+
+public struct Site: Dateable {
     public var sgvs: [SensorGlucoseValue] = []
     public var cals: [Calibration] = []
     public var mbgs: [MeteredGlucoseValue] = []
-    public var deviceStatus: DeviceStatus = DeviceStatus(uploaderBattery: 0)
-    public var lastUpdated: NSDate = NSDate(timeIntervalSince1970: 0)
+    public var deviceStatus: [DeviceStatus] = [] //DeviceStatus(uploaderBattery: 0, milliseconds: 0)
+    public var milliseconds: Int =  Int(NSDate().timeIntervalSince1970 * 1000)
+    //    public var lastUpdated: NSDate = NSDate(timeIntervalSince1970: 0)
+}
+
+// Thanks Mike Ash
+extension Array {
+    subscript (safe index: UInt) -> Element? {
+        return Int(index) < count ? self[Int(index)] : nil
+    }
 }

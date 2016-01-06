@@ -14,8 +14,8 @@
 		173364701C3AFB5C00A218AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1733646F1C3AFB5C00A218AB /* Assets.xcassets */; };
 		173364731C3AFB5C00A218AB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 173364711C3AFB5C00A218AB /* LaunchScreen.storyboard */; };
 		17F08CDF1C3C5DB1001AEACA /* DetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F08CDE1C3C5DB1001AEACA /* DetailTableViewController.swift */; };
-		3BE7E51FC1A67068741BCFEA /* Pods_NightscouterSocketTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6726257BB9278DBCB0B514EE /* Pods_NightscouterSocketTest.framework */; };
-		B49341C5FAD503CCA1B6DFA2 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4991644717B5C75D72DC48BF /* Pods.framework */; };
+		17F458581C3D754200C5233B /* SocketSignal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F458571C3D754200C5233B /* SocketSignal.swift */; };
+		67655372C953C531ED395448 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4991644717B5C75D72DC48BF /* Pods.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,10 +28,10 @@
 		173364721C3AFB5C00A218AB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		173364741C3AFB5C00A218AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		17F08CDE1C3C5DB1001AEACA /* DetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailTableViewController.swift; sourceTree = "<group>"; };
-		26FE49579904A618252EEDDA /* Pods-NightscouterSocketTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NightscouterSocketTest.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NightscouterSocketTest/Pods-NightscouterSocketTest.debug.xcconfig"; sourceTree = "<group>"; };
+		17F458571C3D754200C5233B /* SocketSignal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketSignal.swift; sourceTree = "<group>"; };
+		1EB6C4DAAAD604B421F146A5 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		4991644717B5C75D72DC48BF /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5706E52A1119D07BD09C2F1A /* Pods-NightscouterSocketTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NightscouterSocketTest.release.xcconfig"; path = "Pods/Target Support Files/Pods-NightscouterSocketTest/Pods-NightscouterSocketTest.release.xcconfig"; sourceTree = "<group>"; };
-		6726257BB9278DBCB0B514EE /* Pods_NightscouterSocketTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NightscouterSocketTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CBD186576EF736192B643930 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,8 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3BE7E51FC1A67068741BCFEA /* Pods_NightscouterSocketTest.framework in Frameworks */,
-				B49341C5FAD503CCA1B6DFA2 /* Pods.framework in Frameworks */,
+				67655372C953C531ED395448 /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,8 +51,8 @@
 			children = (
 				173364651C3AFB5B00A218AB /* NightscouterSocketTest */,
 				173364641C3AFB5B00A218AB /* Products */,
-				EEFA48BA1ED7304DECED2A75 /* Pods */,
 				F94E6C1FC5086F091BFA9485 /* Frameworks */,
+				6B35AECD7243253AAFD94046 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -68,6 +67,7 @@
 		173364651C3AFB5B00A218AB /* NightscouterSocketTest */ = {
 			isa = PBXGroup;
 			children = (
+				17F458571C3D754200C5233B /* SocketSignal.swift */,
 				173364741C3AFB5C00A218AB /* Info.plist */,
 				173364661C3AFB5B00A218AB /* AppDelegate.swift */,
 				17F08CDE1C3C5DB1001AEACA /* DetailTableViewController.swift */,
@@ -80,11 +80,11 @@
 			path = NightscouterSocketTest;
 			sourceTree = "<group>";
 		};
-		EEFA48BA1ED7304DECED2A75 /* Pods */ = {
+		6B35AECD7243253AAFD94046 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				26FE49579904A618252EEDDA /* Pods-NightscouterSocketTest.debug.xcconfig */,
-				5706E52A1119D07BD09C2F1A /* Pods-NightscouterSocketTest.release.xcconfig */,
+				1EB6C4DAAAD604B421F146A5 /* Pods.debug.xcconfig */,
+				CBD186576EF736192B643930 /* Pods.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -92,7 +92,6 @@
 		F94E6C1FC5086F091BFA9485 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				6726257BB9278DBCB0B514EE /* Pods_NightscouterSocketTest.framework */,
 				4991644717B5C75D72DC48BF /* Pods.framework */,
 			);
 			name = Frameworks;
@@ -105,12 +104,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 173364771C3AFB5C00A218AB /* Build configuration list for PBXNativeTarget "NightscouterSocketTest" */;
 			buildPhases = (
-				1BF9AA5EE64E3AE070B9DF17 /* Check Pods Manifest.lock */,
+				DF851BC5CA32CA16CFFF12CF /* Check Pods Manifest.lock */,
 				1733645F1C3AFB5B00A218AB /* Sources */,
 				173364601C3AFB5B00A218AB /* Frameworks */,
 				173364611C3AFB5B00A218AB /* Resources */,
-				2378F09DDD86D44A6E1126F5 /* Embed Pods Frameworks */,
-				73DCF8ACD1B3ECB0B2E42159 /* Copy Pods Resources */,
+				DAAFDF2A098CCB5084ABF244 /* Embed Pods Frameworks */,
+				E7CF0DCBD7B8F6F1F59A67DC /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -168,22 +167,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1BF9AA5EE64E3AE070B9DF17 /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		2378F09DDD86D44A6E1126F5 /* Embed Pods Frameworks */ = {
+		DAAFDF2A098CCB5084ABF244 /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -198,7 +182,22 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		73DCF8ACD1B3ECB0B2E42159 /* Copy Pods Resources */ = {
+		DF851BC5CA32CA16CFFF12CF /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		E7CF0DCBD7B8F6F1F59A67DC /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -210,7 +209,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NightscouterSocketTest/Pods-NightscouterSocketTest-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -221,6 +220,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				17F08CDF1C3C5DB1001AEACA /* DetailTableViewController.swift in Sources */,
+				17F458581C3D754200C5233B /* SocketSignal.swift in Sources */,
 				170250EE1C3AFDE9008BAB8E /* SocketClient.swift in Sources */,
 				173364691C3AFB5C00A218AB /* MasterViewController.swift in Sources */,
 				173364671C3AFB5B00A218AB /* AppDelegate.swift in Sources */,
@@ -334,7 +334,7 @@
 		};
 		173364781C3AFB5C00A218AB /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 26FE49579904A618252EEDDA /* Pods-NightscouterSocketTest.debug.xcconfig */;
+			baseConfigurationReference = 1EB6C4DAAAD604B421F146A5 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = NightscouterSocketTest/Info.plist;
@@ -346,7 +346,7 @@
 		};
 		173364791C3AFB5C00A218AB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5706E52A1119D07BD09C2F1A /* Pods-NightscouterSocketTest.release.xcconfig */;
+			baseConfigurationReference = CBD186576EF736192B643930 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = NightscouterSocketTest/Info.plist;

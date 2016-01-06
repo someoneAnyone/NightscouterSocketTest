@@ -1,12 +1,25 @@
 PODS:
   - DateTools (1.7.0)
   - Keys (1.0.0)
+  - ReactiveCocoa (4.0.4-alpha-4):
+    - ReactiveCocoa/UI (= 4.0.4-alpha-4)
+    - Result (~> 1.0)
+  - ReactiveCocoa/Core (4.0.4-alpha-4):
+    - ReactiveCocoa/no-arc
+    - Result (~> 1.0)
+  - ReactiveCocoa/no-arc (4.0.4-alpha-4):
+    - Result (~> 1.0)
+  - ReactiveCocoa/UI (4.0.4-alpha-4):
+    - ReactiveCocoa/Core
+    - Result (~> 1.0)
+  - Result (1.0.1)
   - Socket.IO-Client-Swift (4.1.6)
   - SwiftyJSON (2.3.2)
 
 DEPENDENCIES:
   - DateTools
   - Keys (from `Pods/CocoaPodsKeys`)
+  - ReactiveCocoa (= 4.0.4-alpha-4)
   - Socket.IO-Client-Swift (~> 4.1.6)
   - SwiftyJSON (from `https://github.com/SwiftyJSON/SwiftyJSON.git`)
 
@@ -24,6 +37,8 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   DateTools: 53288ee8b905fdc75897a1e6b5cc0144b14cba60
   Keys: 7d2ff6ff42f6903358267ce56e9392f83c31acfe
+  ReactiveCocoa: e459ea92099447802df20c4735e31e8139b06094
+  Result: caef80340451e1f07492fa1e89117f83613bce24
   Socket.IO-Client-Swift: 5e8aa2961d1f32e5c0e104c00c9f192133a92d11
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
 

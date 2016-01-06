@@ -84,8 +84,18 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_framework "Pods/DateTools.framework"
   install_framework "Pods/Keys.framework"
+  install_framework "Pods/ReactiveCocoa.framework"
+  install_framework "Pods/Result.framework"
+  install_framework "Pods/Socket_IO_Client_Swift.framework"
+  install_framework "Pods/SwiftyJSON.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework "Pods/DateTools.framework"
   install_framework "Pods/Keys.framework"
+  install_framework "Pods/ReactiveCocoa.framework"
+  install_framework "Pods/Result.framework"
+  install_framework "Pods/Socket_IO_Client_Swift.framework"
+  install_framework "Pods/SwiftyJSON.framework"
 fi

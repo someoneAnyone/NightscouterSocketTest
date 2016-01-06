@@ -16,14 +16,7 @@
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>6</integer>
-		</dict>
-		<key>Pods-NightscouterSocketTest.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>3</integer>
+			<integer>7</integer>
 		</dict>
 		<key>Pods.xcscheme</key>
 		<dict>
@@ -32,29 +25,53 @@
 			<key>orderHint</key>
 			<integer>2</integer>
 		</dict>
-		<key>Socket.IO-Client-Swift.xcscheme</key>
+		<key>ReactiveCocoa.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
+		<key>Result.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
 			<integer>4</integer>
 		</dict>
-		<key>SwiftyJSON.xcscheme</key>
+		<key>Socket.IO-Client-Swift.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
 			<integer>5</integer>
 		</dict>
+		<key>SwiftyJSON.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+			<key>orderHint</key>
+			<integer>6</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>74D4ED2F2B080AEA8D6200060E27D4AE</key>
+		<key>123F88CD453C1EFB8F350269D9D75B12</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8D84C45177FA5F0408F68A0AD7A747ED</key>
+		<key>1D365C66AB6D2587F16E3F2B52BAC2E8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>34DA69EF20929F0DA2A279DE66EA0EE9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A0EB1B4C81C913B6087C730E8AE40C98</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -64,12 +81,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>DB06C29A26CDB566D7B230DD8A5CDC7A</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>DFD8B13EBE128DDA6E215B6A0EBA4189</key>
+		<key>D59F4E043F6F50CE5A626D24D72C7051</key>
 		<dict>
 			<key>primary</key>
 			<true/>
