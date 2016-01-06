@@ -208,6 +208,19 @@ public protocol DeviceOwnable {
 
 public struct DeviceStatus: CustomStringConvertible {
     let uploaderBattery: Int
+    var batteryLevel: String {
+        get {
+            let numFormatter = NSNumberFormatter()
+            
+            numFormatter.locale = NSLocale.systemLocale()
+            numFormatter.numberStyle = .PercentStyle
+            numFormatter.zeroSymbol = "--%"
+            
+            let precentage = Float(uploaderBattery)/100
+            
+            return numFormatter.stringFromNumber(precentage ?? 0)!
+        }
+    }
     
     public var description: String {
         return "DeviceStatus - Battery: \(uploaderBattery)"
