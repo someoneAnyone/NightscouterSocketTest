@@ -6,12 +6,13 @@ use_frameworks!
 target 'NightscouterSocketTest' do
     pod 'Socket.IO-Client-Swift', '~> 4.1.6' # Or latest version
     pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'
-    
+    pod 'DateTools'
 end
 
 plugin 'cocoapods-keys', {
     :project => "NightscouterSocketTest",
     :keys => [
-    "nightscoutSecretSHA1Key",
+    "NightscoutTestSite",
+    "NightscoutSecretSHA1Key",
     ]
 }

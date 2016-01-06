@@ -38,8 +38,8 @@ public class NightscoutSocketIOClient {
     public convenience init () {
         // This project uses cocoapods-keys to store secrets.
         // Get all the keys.
-         let keys = NightscoutersockettestKeys()
-
+        let keys = NightscoutersockettestKeys()
+        
         self.init(url: NSURL(string: keys.nightscoutTestSite())!, apiSecret: keys.nightscoutSecretSHA1Key())
     }
     
@@ -54,13 +54,13 @@ public class NightscoutSocketIOClient {
         // Create a socket.io client with a url string.
         self.socket = SocketIOClient(socketURL: url.absoluteString, options: [.Log(false), .ForcePolling(false)])
         
-        // Listen to connect
+        // Listen to connect.
         socket.on(WebEvents.connect.rawValue) { data, ack in
             print("socket connected")
             self.socket.emit(WebEvents.authorize.rawValue, self.authorizationJSON ?? "{}")
         }
         
-        // Listen to disconnect
+        // Listen to disconnect.
         socket.on(WebEvents.disconnect.rawValue) { data, ack in
             print("socket disconnect")
         }
@@ -94,6 +94,7 @@ extension NightscoutSocketIOClient {
             site.lastUpdated = NSDate(timeIntervalSince1970: (Double(lastUpdated) / 1000))
             
         }
+        
         if let uploaderBattery = json[JSONProperty.devicestatus][JSONProperty.uploaderBattery].int {
             // print(uploaderBattery)
             site.deviceStatus = DeviceStatus(uploaderBattery: uploaderBattery)
@@ -131,6 +132,11 @@ extension NightscoutSocketIOClient {
             }
         }
         // print(site)
+        
+        site.sgvs = site.sgvs.reverse()
+        site.cals = site.cals.reverse()
+        site.mbgs = site.mbgs.reverse()
+        
         self.site = site
     }
 }
@@ -154,6 +160,8 @@ struct JSONProperty {
     static let unfiltered = "unfiltered"
     static let direction = "direction"
     static let noise = "noise"
+    static let profiles = "profiles"
+    static let treatments = "treatments"
 }
 
 public enum ClientNotifications: String {
@@ -179,9 +187,7 @@ struct SocketValue {
     static let ClientMobile = "mobile"
 }
 
-
 // MARK: - Things that would be in a framework... Common data structures, models, etc...
-
 public protocol Dateable {
     var milliseconds: Int { get }
 }
@@ -231,7 +237,6 @@ public struct SensorGlucoseValue: CustomStringConvertible, Dateable, GlucoseValu
     public var description: String {
         return "SensorGlucoseValue - Device: \(device), mg/dL: \(mgdl), Date: \(date), Direction: \(direction)"
     }
-
 }
 
 public struct Calibration: CustomStringConvertible, Dateable {
@@ -243,7 +248,6 @@ public struct Calibration: CustomStringConvertible, Dateable {
     public var description: String {
         return "Calibration - Slope: \(slope), intercept: \(intercept), scale: \(scale), Date: \(date)"
     }
-
 }
 
 public struct Site {

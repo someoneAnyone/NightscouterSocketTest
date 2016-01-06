@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DateTools
 
 class DetailTableViewController: UITableViewController {
     
@@ -48,7 +49,7 @@ class DetailTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
         
-        //         Configure the cell...
+        // Configure the cell...
         
         if let object = detailItem?[indexPath.row] {
             cell.textLabel?.text = object.name

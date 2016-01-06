@@ -85,11 +85,13 @@ strip_invalid_archs() {
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-NightscouterSocketTest/Keys.framework"
+  install_framework "Pods-NightscouterSocketTest/DateTools.framework"
   install_framework "Pods-NightscouterSocketTest/Socket_IO_Client_Swift.framework"
   install_framework "Pods-NightscouterSocketTest/SwiftyJSON.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-NightscouterSocketTest/Keys.framework"
+  install_framework "Pods-NightscouterSocketTest/DateTools.framework"
   install_framework "Pods-NightscouterSocketTest/Socket_IO_Client_Swift.framework"
   install_framework "Pods-NightscouterSocketTest/SwiftyJSON.framework"
 fi

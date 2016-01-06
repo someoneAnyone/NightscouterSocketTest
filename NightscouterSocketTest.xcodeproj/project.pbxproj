@@ -10,7 +10,6 @@
 		170250EE1C3AFDE9008BAB8E /* SocketClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170250ED1C3AFDE9008BAB8E /* SocketClient.swift */; };
 		173364671C3AFB5B00A218AB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173364661C3AFB5B00A218AB /* AppDelegate.swift */; };
 		173364691C3AFB5C00A218AB /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 173364681C3AFB5B00A218AB /* MasterViewController.swift */; };
-		1733646B1C3AFB5C00A218AB /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1733646A1C3AFB5C00A218AB /* DetailViewController.swift */; };
 		1733646E1C3AFB5C00A218AB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1733646C1C3AFB5C00A218AB /* Main.storyboard */; };
 		173364701C3AFB5C00A218AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1733646F1C3AFB5C00A218AB /* Assets.xcassets */; };
 		173364731C3AFB5C00A218AB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 173364711C3AFB5C00A218AB /* LaunchScreen.storyboard */; };
@@ -24,7 +23,6 @@
 		173364631C3AFB5B00A218AB /* NightscouterSocketTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NightscouterSocketTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		173364661C3AFB5B00A218AB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		173364681C3AFB5B00A218AB /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
-		1733646A1C3AFB5C00A218AB /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		1733646D1C3AFB5C00A218AB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1733646F1C3AFB5C00A218AB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		173364721C3AFB5C00A218AB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -70,15 +68,14 @@
 		173364651C3AFB5B00A218AB /* NightscouterSocketTest */ = {
 			isa = PBXGroup;
 			children = (
+				173364741C3AFB5C00A218AB /* Info.plist */,
 				173364661C3AFB5B00A218AB /* AppDelegate.swift */,
+				17F08CDE1C3C5DB1001AEACA /* DetailTableViewController.swift */,
 				173364681C3AFB5B00A218AB /* MasterViewController.swift */,
 				170250ED1C3AFDE9008BAB8E /* SocketClient.swift */,
-				1733646A1C3AFB5C00A218AB /* DetailViewController.swift */,
-				1733646C1C3AFB5C00A218AB /* Main.storyboard */,
-				17F08CDE1C3C5DB1001AEACA /* DetailTableViewController.swift */,
 				1733646F1C3AFB5C00A218AB /* Assets.xcassets */,
 				173364711C3AFB5C00A218AB /* LaunchScreen.storyboard */,
-				173364741C3AFB5C00A218AB /* Info.plist */,
+				1733646C1C3AFB5C00A218AB /* Main.storyboard */,
 			);
 			path = NightscouterSocketTest;
 			sourceTree = "<group>";
@@ -223,7 +220,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1733646B1C3AFB5C00A218AB /* DetailViewController.swift in Sources */,
 				17F08CDF1C3C5DB1001AEACA /* DetailTableViewController.swift in Sources */,
 				170250EE1C3AFDE9008BAB8E /* SocketClient.swift in Sources */,
 				173364691C3AFB5C00A218AB /* MasterViewController.swift in Sources */,

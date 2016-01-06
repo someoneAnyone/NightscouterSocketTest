@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'D0335533F0194CD7239802B2'
+               BlueprintIdentifier = 'E2E237DE7A9A80110BD9CCC6'
                BlueprintName = 'Pods-NightscouterSocketTest'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'Pods_NightscouterSocketTest.framework'>

@@ -10,7 +10,7 @@ import UIKit
 
 class MasterViewController: UITableViewController {
 
-    var detailViewController: DetailViewController? = nil
+    var detailViewController: DetailTableViewController? = nil
     var objects = [SectionData]()
 
 
@@ -23,7 +23,7 @@ class MasterViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = addButton
         if let split = self.splitViewController {
             let controllers = split.viewControllers
-            self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
+            self.detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailTableViewController
         }
         
         NightscoutSocketIOClient()
@@ -100,23 +100,23 @@ class MasterViewController: UITableViewController {
             let status = site.deviceStatus
             
             let sgvs = site.sgvs.map({
-                SectionData(name: $0.date.description, detail: "device: \($0.device) mgdl: \($0.mgdl)", data: nil)
+                SectionData(name: $0.date.timeAgoSinceNow(), detail: "device: \($0.device) mgdl: \($0.mgdl)", data: nil)
             })
             let cals = site.cals.map({
-                SectionData(name: $0.date.description, detail: "intercept: \($0.intercept)", data: nil)
+                SectionData(name: $0.date.timeAgoSinceNow(), detail: "intercept: \($0.intercept) scale: \($0.scale) slope: \($0.slope)", data: nil)
             })
 
             let mbgs = site.mbgs.map({
-                SectionData(name: $0.date.description, detail: "mgdl: \($0.mgdl)", data: nil)
+                SectionData(name: $0.date.timeAgoSinceNow(), detail: "device: \($0.device) mgdl: \($0.mgdl)", data: nil)
             })
 
             
             
             let section0 = SectionData(name: "Battery", detail: String(status.uploaderBattery), data: nil)
-            let section1 = SectionData(name: "Last Update", detail: last.description, data: nil)
-            let section2 = SectionData(name: "Sensor Glucose Values", detail: "count: \(sgvs.count)", data: sgvs)
-            let section3 = SectionData(name: "Calibration Values", detail: "count: \(cals.count)", data: cals)
-            let section4 = SectionData(name: "Meter Glucose Values", detail: "count: \(mbgs.count)", data: mbgs)
+            let section1 = SectionData(name: "Last Update", detail: last.timeAgoSinceNow(), data: nil)
+            let section2 = SectionData(name: "Sensor Glucose Values", detail: "count \(sgvs.count)", data: sgvs)
+            let section3 = SectionData(name: "Calibration Values", detail: "count \(cals.count)", data: cals)
+            let section4 = SectionData(name: "Meter Glucose Values", detail: "count \(mbgs.count)", data: mbgs)
             
         objects.appendContentsOf([section0, section1, section2, section3, section4])
             

@@ -4,40 +4,52 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>DateTools.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 		<key>Keys.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>6</integer>
 		</dict>
 		<key>Pods-NightscouterSocketTest.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>3</integer>
 		</dict>
 		<key>Pods.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>2</integer>
 		</dict>
 		<key>Socket.IO-Client-Swift.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>4</integer>
 		</dict>
 		<key>SwiftyJSON.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
+			<key>orderHint</key>
+			<integer>5</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>068E62B67F7AEAB511A6D2238319F44B</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>5A26079601DD45E0FBB37C6B86597F1E</key>
+		<key>74D4ED2F2B080AEA8D6200060E27D4AE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -47,7 +59,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>ABF6B16CA2687BAD470F750C34B1632C</key>
+		<key>AFEDA8059B169E4068B6DCC4D2F0B0E9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DB06C29A26CDB566D7B230DD8A5CDC7A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DFD8B13EBE128DDA6E215B6A0EBA4189</key>
 		<dict>
 			<key>primary</key>
 			<true/>
